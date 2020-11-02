@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-class League extends React.Component{
+class Teams extends React.Component{
     /*
     constructor(props) {
         super(props);
@@ -8,7 +8,7 @@ class League extends React.Component{
         console.log(this.state);
     }
     */
-     state={};
+    state={};
 
     /* componentWillMount() {
 
@@ -28,24 +28,12 @@ class League extends React.Component{
      }*/
 
     render() {
+        //console.log(this.props.leagues.params);
         return (
-
-            <div className="row">
-                <div className="col align-self-center ">
-                <div className="card m-2">
-                        <div className="card-body">
-                            <img className="card-img-top mr-4" src={this.props.league.image_url+'?token=d9zbt5VD5wx3tJWAFyfRZa5UgYW_-GyVEhwAERB60GEqMD4EiCE'} alt={this.state.name}/>
-                            <strong className="card-title">{this.props.league.name}</strong>
-                        </div>
-                    <div className="card-footer">
-
-                    </div>
-                </div>
-                </div>
-            </div>
-
-
+            <>
+            <div>aa</div>
+            </>
         );
     }
 }
-export default League;
+export default Teams;
