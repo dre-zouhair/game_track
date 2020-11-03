@@ -1,6 +1,9 @@
-import React from 'react';
 import './App.css';
-class Teams extends React.Component{
+import React, {useEffect, useState} from "react";
+import * as axios from "axios";
+import Team from "./Team";
+
+function  Teams (){
     /*
     constructor(props) {
         super(props);
@@ -8,8 +11,6 @@ class Teams extends React.Component{
         console.log(this.state);
     }
     */
-    state={};
-
     /* componentWillMount() {
 
       //   console.log(this.props.league.id);
@@ -25,15 +26,58 @@ class Teams extends React.Component{
                 image_url : this.props.league.image_url
          });
          console.log(this.state);
-     }*/
+     }
 
-    render() {
-        //console.log(this.props.leagues.params);
+  */
+    const [data, setData] = useState({
+        Teams : [],
+        page_number:1,
+        x_total: 0
+    });
+
+    const LoadTeams = async () => {
+        const result = await axios(
+            process.env.REACT_APP_API_URL+'/teams?page[size]=5&page[number]='+data.page_number+'&token='+process.env.REACT_APP_token
+        );
+        setData({
+            Teams : result.data,
+            page_number: data.page_number,
+            x_total: result.headers["x-total"]
+        });
+
+    };
+    useEffect( () => LoadTeams() ,[data.page_number]);
+
+    const Load = (number) => {
+        setData({
+            Teams : data.Teams,
+            page_number: data.page_number  + number,
+            x_total: data.x_total
+        });
+        console.log(data);
+    }
+
         return (
             <>
-            <div>aa</div>
+                <div className="container">
+                    {data.Teams.map(team => <Team key={team.id} team={team}/>)}
+                </div>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <button onClick={() => Load(-1)}  disabled={data.page_number == 1}>Back</button>
+                            <button onClick={() => Load(-2)} hidden={data.page_number-2 <1}>{data.page_number-2}</button>
+                            <button onClick={() => Load(-1)} hidden={data.page_number-1 <1}>{data.page_number-1}</button>
+                            <button onClick={() => Load(0)} disabled={true}>{data.page_number}</button>
+                            <button onClick={() => Load(1)} hidden={data.x_total < 5*(data.page_number)}>{data.page_number+1}</button>
+                            <button onClick={() => Load(2)} hidden={data.x_total < 5*(data.page_number+1)}>{data.page_number+2}</button>
+                            <button onClick={() => Load(1)} disabled={data.x_total<5*data.page_number}>Next</button>
+                        </div>
+                    </div>
+                </div>
+
             </>
         );
-    }
+
 }
 export default Teams;
