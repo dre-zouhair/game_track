@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import {Link} from "react-router-dom";
 class League extends React.Component{
     /*
     constructor(props) {
@@ -28,6 +29,7 @@ class League extends React.Component{
      }*/
 
     render() {
+      //  console.log(`/leagues/${this.props.league.id}`);
         return (
 
             <div className="row">
@@ -38,7 +40,7 @@ class League extends React.Component{
                             <strong className="card-title">{this.props.league.name}</strong>
                         </div>
                     <div className="card-footer">
-
+                        <Link to={`/leagues/${this.props.league.id}`}>Deatail</Link>
                     </div>
                 </div>
                 </div>

@@ -2,13 +2,14 @@ import './App.css';
 import './Leagues'
 import Teams from "./Teams";
 import Leagues from "./Leagues";
+import  LeagueDetails from './LeagueDetails';
+
 import {
     BrowserRouter as Router,
     Switch,
     Route,
     Link
 } from "react-router-dom";
-import League from "./League";
 
 function App() {
   return (
@@ -23,7 +24,8 @@ function App() {
                 </nav>
                 <hr />
                 <Switch>
-                    <Route path='/leagues' component={Leagues} />
+                    <Route exact path='/leagues' component={Leagues} />
+                    <Route path='/leagues/:Id' component={LeagueDetails} />
                     <Route exact path='/teams' component={Teams} />
                 </Switch>
             </div>
