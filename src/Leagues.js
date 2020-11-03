@@ -4,10 +4,7 @@ import './App.css';
 import axios from 'axios';
 
 class Leagues extends React.Component {
-    // eslint-disable-next-line no-useless-constructor
-    /*constructor (props) {
-        super(props);
-    }*/
+
     constructor() {
         super();
         this.Load = this.Load.bind(this);
@@ -15,7 +12,7 @@ class Leagues extends React.Component {
         this.state = {
             Leagues : [],
             page_number:1,
-            finale_page:false
+            x_total: 0
         }
     }
 
@@ -24,13 +21,14 @@ class Leagues extends React.Component {
         {
             return {
                 Leagues : this.state.Leagues,
-                page_number : this.state.page_number + number
+                page_number : this.state.page_number + number,
+                x_total: this.state.x_total
             }
         },()=> this.getLeagues());
     }
     getLeagues(){
         /*
-        fetch(process.env.REACT_APP_API_URL+'/leagues?page[size]=5&page[number]='+this.state.page_number+'&token='+process.env.REACT_APP_token)
+        fetch(process.env.REACT_APP_API_URL+'/leagues'+'?token='+process.env.REACT_APP_token)
             .then(
             response => {
                     this.setState((state)=>{
@@ -43,20 +41,18 @@ class Leagues extends React.Component {
             console.log(error);
         });
         */
-        axios.get(process.env.REACT_APP_API_URL+'/leagues?page[size]=100&page[number]='+this.state.page_number+'&token='+process.env.REACT_APP_token)
-            .then( res => {
-
+        axios.get(process.env.REACT_APP_API_URL+'/leagues?page[size]=50&page[number]='+this.state.page_number+'&token='+process.env.REACT_APP_token)
+            .then( response => {
                 this.setState({
-                        Leagues : res.data,
+                        Leagues : response.data,
                         page_number: this.state.page_number,
-                        finale_page: res.headers["x-total"]<100*this.state.page_number?true:false
+                        x_total: response.headers["x-total"]
                 });
-                console.log(res.headers);
-            })
+                console.log(response);
+            });
 
     }
     componentWillMount(number) {
-        //  fetch(api.token.link, api.token.object)
         this.getLeagues();
     }
 
@@ -75,10 +71,10 @@ class Leagues extends React.Component {
                             <button onClick={() => this.Load(-2)} hidden={this.state.page_number-2 <1}>{this.state.page_number-2}</button>
                             <button onClick={() => this.Load(-1)} hidden={this.state.page_number-1 <1}>{this.state.page_number-1}</button>
                             <button onClick={() => this.Load(0)} disabled={true}>{this.state.page_number}</button>
-                            <button onClick={() => this.Load(1)} disabled={this.state.finale_page}>{this.state.page_number+1}</button>
-                            <button onClick={() => this.Load(2)} disabled={this.state.finale_page}>{this.state.page_number+2}</button>
+                            <button onClick={() => this.Load(1)} hidden={this.state.x_total < 50*(this.state.page_number)}>{this.state.page_number+1}</button>
+                            <button onClick={() => this.Load(2)} hidden={this.state.x_total < 50*(this.state.page_number+1)}>{this.state.page_number+2}</button>
 
-                            <button onClick={() => this.Load(1)} disabled={this.state.finale_page}>Next</button>
+                            <button onClick={() => this.Load(1)} disabled={this.state.x_total<50*this.state.page_number}>Next</button>
                         </div>
                     </div>
                 </div>
