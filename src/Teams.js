@@ -1,7 +1,8 @@
 import './App.css';
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import * as axios from "axios";
 import Team from "./Team";
+import {Filter} from './App'
 
 function  Teams (){
     /*
@@ -34,10 +35,11 @@ function  Teams (){
         page_number:1,
         x_total: 0
     });
+    const GameId = useContext(Filter);
 
     const LoadTeams = async () => {
         const result = await axios(
-            process.env.REACT_APP_API_URL+'/teams?page[size]=5&page[number]='+data.page_number+'&token='+process.env.REACT_APP_token
+            process.env.REACT_APP_API_URL+'/'+GameId.data.Id+'/teams?page[size]=5&page[number]='+data.page_number+'&token='+process.env.REACT_APP_token
         );
         setData({
             Teams : result.data,
@@ -45,8 +47,9 @@ function  Teams (){
             x_total: result.headers["x-total"]
         });
 
+
     };
-    useEffect( () => LoadTeams() ,[data.page_number]);
+    useEffect( () => LoadTeams() ,[data.page_number,GameId]);
 
     const Load = (number) => {
         setData({
